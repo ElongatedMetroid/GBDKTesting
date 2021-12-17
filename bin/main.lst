@@ -1,0 +1,121 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.1.6 #12439 (Linux)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	.optsdcc -mgbz80
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _main
+                                     12 	.globl _printf
+                                     13 	.globl _set_sprite_data
+                                     14 	.globl _delay
+                                     15 ;--------------------------------------------------------
+                                     16 ; special function registers
+                                     17 ;--------------------------------------------------------
+                                     18 ;--------------------------------------------------------
+                                     19 ; ram data
+                                     20 ;--------------------------------------------------------
+                                     21 	.area _DATA
+                                     22 ;--------------------------------------------------------
+                                     23 ; ram data
+                                     24 ;--------------------------------------------------------
+                                     25 	.area _INITIALIZED
+                                     26 ;--------------------------------------------------------
+                                     27 ; absolute external ram data
+                                     28 ;--------------------------------------------------------
+                                     29 	.area _DABS (ABS)
+                                     30 ;--------------------------------------------------------
+                                     31 ; global & static initialisations
+                                     32 ;--------------------------------------------------------
+                                     33 	.area _HOME
+                                     34 	.area _GSINIT
+                                     35 	.area _GSFINAL
+                                     36 	.area _GSINIT
+                                     37 ;--------------------------------------------------------
+                                     38 ; Home
+                                     39 ;--------------------------------------------------------
+                                     40 	.area _HOME
+                                     41 	.area _HOME
+                                     42 ;--------------------------------------------------------
+                                     43 ; code
+                                     44 ;--------------------------------------------------------
+                                     45 	.area _CODE
+                                     46 ;src/main.c:7: int main(){
+                                     47 ;	---------------------------------
+                                     48 ; Function main
+                                     49 ; ---------------------------------
+      000000                         50 _main::
+                                     51 ;src/main.c:9: printf("Hello World!");
+      000000 11r60r00                52 	ld	de, #___str_0
+      000003 D5                      53 	push	de
+      000004 CDr00r00                54 	call	_printf
+      000007 E1                      55 	pop	hl
+                                     56 ;src/main.c:11: SPRITES_8x16;       //sets the sprite size to 8x16 pixels 
+      000008 F0r00                   57 	ldh	a, (_LCDC_REG + 0)
+      00000A F6 04                   58 	or	a, #0x04
+      00000C E0r00                   59 	ldh	(_LCDC_REG + 0), a
+                                     60 ;src/main.c:13: set_sprite_data(0, 0, smileSprite);
+      00000E 11r00r00                61 	ld	de, #_smileSprite
+      000011 D5                      62 	push	de
+      000012 AF                      63 	xor	a, a
+      000013 0F                      64 	rrca
+      000014 F5                      65 	push	af
+      000015 CDr00r00                66 	call	_set_sprite_data
+      000018 E8 04                   67 	add	sp, #4
+                                     68 ;/opt/gbdk/include/gb/gb.h:1174: shadow_OAM[nb].tile=tile;
+      00001A 21r02r00                69 	ld	hl, #(_shadow_OAM + 2)
+      00001D 36 00                   70 	ld	(hl), #0x00
+                                     71 ;/opt/gbdk/include/gb/gb.h:1247: OAM_item_t * itm = &shadow_OAM[nb];
+      00001F 21r00r00                72 	ld	hl, #_shadow_OAM
+                                     73 ;/opt/gbdk/include/gb/gb.h:1248: itm->y=y, itm->x=x;
+      000022 3E 4B                   74 	ld	a, #0x4b
+      000024 22                      75 	ld	(hl+), a
+      000025 36 4B                   76 	ld	(hl), #0x4b
+                                     77 ;/opt/gbdk/include/gb/gb.h:1174: shadow_OAM[nb].tile=tile;
+      000027 21r06r00                78 	ld	hl, #(_shadow_OAM + 6)
+      00002A 36 02                   79 	ld	(hl), #0x02
+                                     80 ;/opt/gbdk/include/gb/gb.h:1247: OAM_item_t * itm = &shadow_OAM[nb];
+      00002C 21r04r00                81 	ld	hl, #(_shadow_OAM + 4)
+                                     82 ;/opt/gbdk/include/gb/gb.h:1248: itm->y=y, itm->x=x;
+      00002F 3E 4B                   83 	ld	a, #0x4b
+      000031 22                      84 	ld	(hl+), a
+      000032 36 53                   85 	ld	(hl), #0x53
+                                     86 ;src/main.c:20: SHOW_SPRITES;
+      000034 F0r00                   87 	ldh	a, (_LCDC_REG + 0)
+      000036 F6 02                   88 	or	a, #0x02
+      000038 E0r00                   89 	ldh	(_LCDC_REG + 0), a
+                                     90 ;src/main.c:22: while(1){
+      00003A                         91 00102$:
+                                     92 ;/opt/gbdk/include/gb/gb.h:1174: shadow_OAM[nb].tile=tile;
+      00003A 21r02r00                93 	ld	hl, #(_shadow_OAM + 2)
+      00003D 36 04                   94 	ld	(hl), #0x04
+      00003F 21r06r00                95 	ld	hl, #(_shadow_OAM + 6)
+      000042 36 06                   96 	ld	(hl), #0x06
+                                     97 ;src/main.c:25: delay(500);
+      000044 11 F4 01                98 	ld	de, #0x01f4
+      000047 D5                      99 	push	de
+      000048 CDr00r00               100 	call	_delay
+      00004B E1                     101 	pop	hl
+                                    102 ;/opt/gbdk/include/gb/gb.h:1174: shadow_OAM[nb].tile=tile;
+      00004C 21r02r00               103 	ld	hl, #(_shadow_OAM + 2)
+      00004F 36 00                  104 	ld	(hl), #0x00
+      000051 21r06r00               105 	ld	hl, #(_shadow_OAM + 6)
+      000054 36 02                  106 	ld	(hl), #0x02
+                                    107 ;src/main.c:28: delay(500);
+      000056 11 F4 01               108 	ld	de, #0x01f4
+      000059 D5                     109 	push	de
+      00005A CDr00r00               110 	call	_delay
+      00005D E1                     111 	pop	hl
+                                    112 ;src/main.c:31: return 0;
+                                    113 ;src/main.c:32: }
+      00005E 18 DA                  114 	jr	00102$
+      000060                        115 ___str_0:
+      000060 48 65 6C 6C 6F 20 57   116 	.ascii "Hello World!"
+             6F 72 6C 64 21
+      00006C 00                     117 	.db 0x00
+                                    118 	.area _CODE
+                                    119 	.area _INITIALIZER
+                                    120 	.area _CABS (ABS)
